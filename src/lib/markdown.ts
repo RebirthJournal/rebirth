@@ -31,10 +31,12 @@ function prepare(source: string) {
     .join("\n");
 }
 
-markdown.renderer.rules.footnote_anchor_name = (tokens, index, _options, env) =>
-  markdown.utils.escapeHtml(
-    `${env?.id}-${tokens[index].meta?.label ?? Number(tokens[index].meta?.id) + 1}`,
-  );
+markdown.renderer.rules.footnote_anchor_name = (tokens, index, _options, env) => {
+  const meta = tokens[index].meta;
+  const label = typeof meta?.label === "string" ? meta.label : undefined;
+  const docId = typeof env?.id === "string" ? env.id : "";
+  return markdown.utils.escapeHtml(`${docId}-${label ?? Number(meta?.id) + 1}`);
+};
 markdown.renderer.rules.footnote_block_open = () =>
   '<div class="footnotes" role="doc-endnotes">\n<ol class="footnotes-list">\n';
 markdown.renderer.rules.footnote_block_close = () => "</ol>\n</div>\n";
