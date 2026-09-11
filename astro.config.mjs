@@ -4,10 +4,17 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
+import keystatic from '@keystatic/astro';
+import { loadEnv } from 'vite';
+
+const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
+const repository = process.env.PUBLIC_KEYSTATIC_GITHUB_REPO || env.PUBLIC_KEYSTATIC_GITHUB_REPO;
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react()],
+  site: 'https://rebirthjournal.cn',
+  // Local editing runs only in development. Deployed editing uses GitHub.
+  integrations: [react(), ...(process.env.NODE_ENV !== 'production' || repository ? [keystatic()] : [])],
 
   vite: {
     plugins: [tailwindcss()]
