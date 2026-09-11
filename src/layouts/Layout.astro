@@ -1,0 +1,25 @@
+---
+import Header from '../components/Header';
+import { reader, journalUrl } from '../lib/content';
+import '../styles/global.css';
+import '../styles/journal.css';
+interface Props { title?: string; description?: string; author?: string }
+const settings = await reader.singletons.journal.readOrThrow();
+const { title, description = settings.tagline, author = settings.author } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ? `${title} - ${settings.title}` : `${settings.title} - ${settings.tagline}`}</title>
+    <meta name="author" content={author} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" type="image/png" href="/img/logo-white-black-vertical.png" />
+  </head>
+  <body>
+    <Header issues={settings.issues.map(name => ({ name, href: journalUrl(name) }))} client:load />
+    <slot />
+  </body>
+</html>

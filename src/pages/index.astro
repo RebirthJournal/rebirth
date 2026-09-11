@@ -1,17 +1,15 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import { reader, journalUrl } from '../lib/content';
+const home = await reader.singletons.home.readOrThrow();
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout description={home.quote.slice(0, 80)}>
+  <main class="flex flex-col items-center bg-[#333]">
+    <img src="/img/logo-white-transparent-vertical.png" alt="Logo" class="h-[70vh] object-contain" />
+    <blockquote class="home-quote relative pl-0">
+      <span class="home-quote-mark absolute text-right font-songti-light select-none" aria-hidden="true">“</span>
+      <p class="font-songti-light">{home.quote}</p>
+      <a href={journalUrl(home.issue)} class="home-read dark-link float-right p-2">{home.readLabel} &rarr;</a>
+    </blockquote>
+  </main>
+</Layout>

@@ -13,6 +13,8 @@ const repository = process.env.PUBLIC_KEYSTATIC_GITHUB_REPO || env.PUBLIC_KEYSTA
 // https://astro.build/config
 export default defineConfig({
   site: 'https://rebirthjournal.cn',
+  build: { format: 'preserve' },
+  redirects: { '/关于.html': { status: 301, destination: '/%E5%85%B3%E4%BA%8E/' } },
   // Local editing runs only in development. Deployed editing uses GitHub.
   integrations: [react(), ...(process.env.NODE_ENV !== 'production' || repository ? [keystatic()] : [])],
 

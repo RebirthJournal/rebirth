@@ -1,0 +1,13 @@
+---
+import ArticlePage from '../../components/ArticlePage.astro';
+import { reader } from '../../lib/content';
+
+export async function getStaticPaths() {
+  return (await reader.collections.articles.all()).map(({ slug, entry }) => ({
+    params: { article: slug },
+    props: { slug, article: entry },
+  }));
+}
+const { slug, article } = Astro.props;
+---
+<ArticlePage slug={slug} article={article} />

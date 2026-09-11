@@ -1,0 +1,126 @@
+@font-face { font-family: "Songti Light"; src: url('/fonts/AdobeSongStd-Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Songti Bold"; src: url('/fonts/STSongti-SC-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Songti Black"; src: url('/fonts/STSongti-SC-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+@font-face { font-family: Kaiti; src: url('/fonts/STKaiti.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: Mingti; src: url('/fonts/HanWangMing-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+
+html { font-size: 18px; scroll-padding-top: 100px; }
+body, .font-songti-light, #contents > nav > a {
+  font-family: "Songti Light", "Songti SC", STSong, SimSun, serif;
+  font-weight: 300;
+}
+.navbar, main b, main strong {
+  font-family: "Songti Bold", "Songti SC", STSong, SimSun, serif;
+  font-weight: 700;
+}
+main .title-line {
+  font-family: "Songti Black", "Songti SC", STSong, SimSun, serif;
+  font-weight: 900;
+}
+.font-mingti, .paginator, main .caption::after, #contents > a {
+  font-family: Mingti, "Songti Bold", "Songti SC", STSong, SimSun, serif;
+  font-weight: 700;
+}
+.font-kaiti, main blockquote p, main blockquote li, main blockquote strong, main blockquote b {
+  font-family: Kaiti, "Kaiti SC", STKaiti, serif;
+  font-weight: 400;
+}
+main blockquote strong, main blockquote b { font-weight: bolder; }
+.font-larger { font-size: larger !important; }
+.font-smaller { font-size: smaller !important; }
+.no-indent { text-indent: 0 !important; }
+.space { display: inline-block; width: 1em; height: 1em; visibility: hidden; }
+cite { font-style: normal; }
+
+.navbar { z-index: 1030; background: black; white-space: nowrap; }
+.dark-link { color: #ddd; }
+.dark-link:hover, .dark-link.active { color: white; }
+
+#contents, #contents-toggle {
+  position: fixed;
+  top: 3.5rem;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  transition: opacity .5s ease, transform .5s ease;
+}
+#contents-toggle { display: flex; align-items: center; }
+#contents-toggle.expanded { visibility: hidden; transform: translateX(-20px); opacity: 0; }
+#contents-toggle::after {
+  color: rgb(0 0 0 / .5);
+  content: "";
+  border-block: .5em solid transparent;
+  border-left: .5em solid;
+}
+#contents {
+  overflow-y: auto;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-20px);
+  opacity: 0;
+  background: white;
+  font-size: 90%;
+  line-height: 1;
+  max-width: 100vw;
+}
+#contents.expanded { visibility: visible; pointer-events: auto; transform: none; opacity: 1; }
+#contents a { color: rgb(0 0 0 / .5); }
+#contents a:hover, #contents a.active { color: black; }
+#contents > a { padding: .65rem 0 .25rem; }
+#contents > nav > a { font-size: 90%; padding: .25rem 0 .25rem 1em; }
+#contents > :first-child { margin-top: auto; }
+#contents > :last-child { margin-bottom: auto; }
+@media (min-width: 1008px) { #contents { max-width: 9.25rem; } }
+@media (min-width: 1152px) { #contents { max-width: 13.25rem; } }
+@media (min-width: 1296px) { #contents { max-width: 17.25rem; } }
+@media (min-width: 1440px) { #contents { max-width: 21.25rem; } }
+@media (min-width: 1584px) { #contents { max-width: 25.25rem; } }
+
+main { position: relative; padding: 0 3rem; line-height: 2; color: black; }
+@media (min-width: 576px) { main { padding-inline: 6rem; } }
+@media (min-width: 1008px) { main { padding-inline: 8rem; } }
+main > * { max-width: 37.5em; margin-block: 1.5rem; }
+main > :first-child { margin-top: 4rem; }
+main > :last-child { margin-bottom: 4rem; }
+main ::selection { background: #fff2ac; }
+main .title-line > :not(:last-child) { margin-right: 2em; }
+@media (min-width: 486px) { .article-text { min-width: 15em; } }
+main p { margin: 0 0 1em; text-align: justify; white-space: pre-wrap; text-indent: 2em; }
+main a { text-decoration: underline .2em rgb(0 0 0 / .25); }
+main a:hover { text-decoration-color: rgb(0 0 0 / .5); }
+main .dark-link { color: white; text-decoration-color: rgb(255 255 255 / .25); }
+main .dark-link:hover { text-decoration-color: rgb(255 255 255 / .5); }
+main h1, main h2, main h3, main h4, main h5, main h6 { margin: 3em 0 2em; }
+main h5 { font-size: 1.1em; }
+main em { font-style: inherit; text-emphasis: dot; text-emphasis-position: under; }
+main blockquote { padding-left: 2em; }
+main blockquote.text-right { padding-left: 0; }
+main blockquote.text-right p { text-align: right !important; }
+main blockquote p, main blockquote li { text-indent: 0; }
+main ol, main ul { padding-left: 1em; }
+main .footnotes { margin-top: 2em; }
+main .footnotes ol { font-size: small; }
+main .caption { position: relative; text-indent: 0; }
+main .caption img { width: 100%; }
+main .caption:last-child { margin-top: 5em; }
+main .caption::after {
+  content: attr(caption);
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  padding: 1em;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+}
+main .caption.left::after { right: auto; }
+main .caption.right::after { left: auto; }
+main .caption.inside::after { color: white; }
+main .caption.top.inside::after { bottom: auto; }
+main .caption.top.outside { margin-top: 3em; }
+main .caption.top.outside::after { top: auto; bottom: 100%; }
+main .caption.bottom.inside::after { top: auto; }
+main .caption.bottom.outside { margin-bottom: 2em; }
+main .caption.bottom.outside::after { top: 100%; bottom: auto; }
+.poem p { text-indent: 0; }
+.paginator { width: 100%; }

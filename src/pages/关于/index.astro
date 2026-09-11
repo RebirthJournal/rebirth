@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { reader } from '../../lib/content';
+import { renderMarkdown, description } from '../../lib/markdown';
+const about = await reader.singletons.about.readOrThrow();
+---
+<Layout title="关于" description={description(about.body)}>
+  <main class="flex flex-col items-center">
+    <h1 class="chapter-title font-mingti">{about.title}</h1>
+    <Fragment set:html={renderMarkdown(about.body, '关于')} />
+  </main>
+</Layout>

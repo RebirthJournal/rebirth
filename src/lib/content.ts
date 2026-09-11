@@ -6,7 +6,7 @@ export type Article = Awaited<ReturnType<typeof reader.collections.articles.read
 export type Chapter = Awaited<ReturnType<typeof reader.collections.chapters.readOrThrow>>;
 
 export const nameOf = (slug: string) => slug.split('/').at(-1)!;
-export const journalUrl = (slug = '') => `/期刊/${slug ? slug.split('/').map(encodeURIComponent).join('/') + '/' : ''}`;
+export const journalUrl = (slug = '') => `/${encodeURIComponent('期刊')}/${slug ? slug.split('/').map(encodeURIComponent).join('/') + '/' : ''}`;
 
 export async function getJournal() {
   const [settings, issues, chapters, articles] = await Promise.all([

@@ -1,0 +1,6 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getJournal, journalUrl } from '../../lib/content';
+const { settings } = await getJournal();
+---
+<Layout title="期刊"><main>{settings.issues.map(issue => <><a href={journalUrl(issue)}>{issue}</a>{' '}</>)}</main></Layout>

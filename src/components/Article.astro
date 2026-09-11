@@ -1,0 +1,14 @@
+---
+import type { Article } from '../lib/content';
+import { nameOf } from '../lib/content';
+import { renderMarkdown } from '../lib/markdown';
+interface Props { article: Article; slug: string }
+const { article, slug } = Astro.props;
+const id = nameOf(slug);
+const heading = article.heading.length ? article.heading : [article.title, article.author].filter(Boolean);
+---
+<article class={article.poem ? 'poem' : 'article'}>
+  <div id={id}></div>
+  {!article.hideHeading && <h5 class="title-line flex flex-wrap mt-4! mb-12!">{heading.map(text => <span>{text}</span>)}</h5>}
+  <div class="article-text" set:html={renderMarkdown(article.body, id)} />
+</article>

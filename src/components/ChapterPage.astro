@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Article from './Article.astro';
+import Contents from './Contents';
+import { getJournal, journalUrl, nameOf } from '../lib/content';
+import { renderMarkdown, description } from '../lib/markdown';
+
+interface Props { slug: string }
+const { slug } = Astro.props;
+const { issueMap, chapterMap, articleMap } = await getJournal();
+const chapter = chapterMap.get(slug)!;
+const issueName = slug.split('/')[0];
+const issue = issueMap.get(issueName)!;
+const name = nameOf(slug);
+const index = issue.chapters.indexOf(slug);
+const previous = issue.chapters[index - 1];
+const next = issue.chapters[index + 1];
+const links = issue.chapters.map(path => {
+  const entry = chapterMap.get(path)!;
+  return {
+    name: entry.entry || nameOf(path),
+    href: path === slug ? `#${encodeURIComponent(name)}` : journalUrl(path),
+    current: path === slug,
+    articles: entry.articles.filter(path => !articleMap.get(path)!.hideEntry).map(articlePath => ({
+      name: articleMap.get(articlePath)!.entry || articleMap.get(articlePath)!.title,
+      href: `${path === slug ? '' : journalUrl(path)}#${encodeURIComponent(nameOf(articlePath))}`,
+      id: nameOf(articlePath),
+    })),
+  };
+});
+---
+<Layout title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(chapter.body)}>
+  <main id={name} class="flex flex-col items-center">
+    <header class="flex flex-col items-center">
+      <h1 class="chapter-title font-mingti my-0!">{name}</h1>
+      <div class="chapter-rule my-4"></div>
+      {chapter.subtitle.length > 0 && <div class="chapter-subtitle flex flex-col items-center font-kaiti text-justify">
+        {chapter.subtitle.map(line => {
+          const punctuation = /[、。！＂＇，．／：；？＼﹐﹑﹒]$/.test(line);
+          return <p class="mb-0 relative no-indent">{punctuation ? line.slice(0, -1) : line}{punctuation && <span class="absolute">{line.slice(-1)}</span>}</p>;
+        })}
+        {chapter.subtitleCite && <p class="mb-0 self-end"><cite>——{chapter.subtitleCite}</cite></p>}
+      </div>}
+    </header>
+    <Fragment set:html={renderMarkdown(chapter.body, `${name}-intro`)} />
+    {chapter.articles.map(path => <Article article={articleMap.get(path)!} slug={path} />)}
+    <nav class="paginator flex" aria-label="章节翻页">
+      {previous && <a href={journalUrl(previous)} class="mr-auto">&larr; {nameOf(previous)}</a>}
+      {next && <a href={journalUrl(next)} class="ml-auto">{nameOf(next)} &rarr;</a>}
+    </nav>
+  </main>
+  <Contents issue={{ name: issueName, href: journalUrl(issueName) }} chapters={links} client:load />
+</Layout>
