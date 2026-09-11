@@ -1,4 +1,11 @@
 allowBuilds:
-  '@parcel/watcher': true
+  "@parcel/watcher": true
   esbuild: true
   sharp: true
+overrides:
+  vite@*: npm:@voidzero-dev/vite-plus-core@0.3.1
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"
