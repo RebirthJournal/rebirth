@@ -6,6 +6,8 @@ import '../styles/journal.css';
 interface Props { title?: string; description?: string; author?: string }
 const settings = await reader.singletons.journal.readOrThrow();
 const { title, description = settings.tagline, author = settings.author } = Astro.props;
+import Analytics from '@vercel/analytics/astro'
+import SpeedInsights from "@vercel/speed-insights/astro"
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -19,6 +21,8 @@ const { title, description = settings.tagline, author = settings.author } = Astr
     <link rel="icon" type="image/png" href="/img/logo-white-black-vertical.png" />
   </head>
   <body>
+    <Analytics/>
+    <SpeedInsights/>
     <Header issues={settings.issues.map(name => ({ name, href: journalUrl(name) }))} client:load />
     <slot />
   </body>
