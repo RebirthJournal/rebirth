@@ -1,43 +1,37 @@
-# Astro Starter Kit: Minimal
+# 《新生》网站
 
-```sh
-pnpm create astro@latest -- --template minimal
+The site is live at <https://www.rebirthjournal.net>.
+
+- Astro (React)
+- Keystatic
+- Tailwind CSS
+
+## Editing
+
+Contents are under `src/content/**/*.yaml`. They can be edited via Keystatic at the [online editor](https://www.rebirthjournal.net/keystatic).
+
+Link articles into a chapter's **文章顺序**, and chapters into an issue's **章节顺序** to set reading order.
+
+Articles are standard [Markdown](https://www.markdownguide.org/getting-started) files with the following extra syntax:
+
+```markdown
+![](/img/图片.jpg)
+{:.caption.bottom.right.outside caption="作者"}
+
+落款
+{:.text-right}
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Development
 
-## 🚀 Project Structure
+Requires [Node.js](https://nodejs.org), [`pnpm`](https://pnpm.io), and [Vite+](https://viteplus.dev).
 
-Inside of your Astro project, you'll see the following folders and files:
+- Start the dev server with `pnpm dev`.
+- Dev server <http://127.0.0.1:4321>
+- Local editor <http://127.0.0.1:4321/keystatic>
+- `pnpm check` checks TypeScript and Astro files.
+- `pnpm build` creates the site and Vercel deployment output.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+With no environment variables, Keystatic edits local files. Commit content changes alongside code. The production editor is enabled only when GitHub storage is configured.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Once pushed to the `main` branch, the site is automatically deployed on Vercel.
