@@ -46,5 +46,7 @@ export async function getJournal() {
     requireReferences(slug, entry.articles, articleMap, slug);
   }
 
-  return { settings, issues, chapters, articles, issueMap, chapterMap, articleMap };
+  const issueUrl = (slug: string) => journalUrl(issueMap.get(slug)?.chapters[0] ?? slug);
+
+  return { settings, issues, chapters, articles, issueMap, chapterMap, articleMap, issueUrl };
 }

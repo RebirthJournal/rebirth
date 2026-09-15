@@ -1,7 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { reader, journalUrl } from '../lib/content';
-const home = await reader.singletons.home.readOrThrow();
+import { reader, getJournal } from '../lib/content';
+const [home, { issueUrl }] = await Promise.all([
+  reader.singletons.home.readOrThrow(),
+  getJournal(),
+]);
 ---
 <Layout description={home.quote.slice(0, 80)}>
   <main class="flex flex-col items-center bg-[#333]">
@@ -9,7 +12,7 @@ const home = await reader.singletons.home.readOrThrow();
     <blockquote class="home-quote relative pl-0">
       <span class="home-quote-mark absolute text-right font-songti-light select-none" aria-hidden="true">“</span>
       <p class="font-songti-light">{home.quote}</p>
-      <a href={journalUrl(home.issue)} class="home-read dark-link float-right p-2">{home.readLabel} &rarr;</a>
+      <a href={issueUrl(home.issue)} class="home-read dark-link float-right p-2">{home.readLabel} &rarr;</a>
     </blockquote>
   </main>
 </Layout>

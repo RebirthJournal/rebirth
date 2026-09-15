@@ -1,10 +1,10 @@
 ---
 import Header from '../components/Header';
-import { reader, journalUrl } from '../lib/content';
+import { getJournal } from '../lib/content';
 import '../styles/global.css';
 import '../styles/journal.css';
 interface Props { title?: string; description?: string; author?: string }
-const settings = await reader.singletons.journal.readOrThrow();
+const { settings, issueUrl } = await getJournal();
 const { title, description = settings.tagline, author = settings.author } = Astro.props;
 import Analytics from '@vercel/analytics/astro'
 import SpeedInsights from "@vercel/speed-insights/astro"
@@ -23,7 +23,7 @@ import SpeedInsights from "@vercel/speed-insights/astro"
   <body>
     <Analytics/>
     <SpeedInsights/>
-    <Header issues={settings.issues.map(name => ({ name, href: journalUrl(name) }))} client:load />
+    <Header issues={settings.issues.map(name => ({ name, href: issueUrl(name) }))} client:load />
     <slot />
   </body>
 </html>

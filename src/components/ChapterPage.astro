@@ -7,7 +7,7 @@ import { renderMarkdown, description } from '../lib/markdown';
 
 interface Props { slug: string }
 const { slug } = Astro.props;
-const { issueMap, chapterMap, articleMap } = await getJournal();
+const { issueMap, chapterMap, articleMap, issueUrl } = await getJournal();
 const chapter = chapterMap.get(slug)!;
 const issueName = slug.split('/')[0];
 const issue = issueMap.get(issueName)!;
@@ -49,5 +49,5 @@ const links = issue.chapters.map(path => {
       {next && <a href={journalUrl(next)} class="ml-auto">{nameOf(next)} &rarr;</a>}
     </nav>
   </main>
-  <Contents issue={{ name: issueName, href: journalUrl(issueName) }} chapters={links} client:load />
+  <Contents issue={{ name: issueName, href: issueUrl(issueName) }} chapters={links} client:load />
 </Layout>
