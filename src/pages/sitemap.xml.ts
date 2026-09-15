@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getJournal, journalUrl } from "../lib/content";
 
-// Issue pages redirect (302, noindex) to their first chapter, so they are omitted.
+// Issue pages redirect (308, noindex) to their first chapter, so they are omitted.
 export const GET: APIRoute = async () => {
   const { chapters, articles } = await getJournal();
   const paths = [
