@@ -46,6 +46,7 @@ main strong {
 }
 main .title-line {
   font-family: "Songti Black", "Songti SC", STSong, SimSun, serif;
+  font-size: 1.1em;
   font-weight: 900;
 }
 .font-mingti,

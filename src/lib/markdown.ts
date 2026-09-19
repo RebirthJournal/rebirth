@@ -1,4 +1,4 @@
-import MarkdownIt, { type MarkdownIt as MarkdownItInstance } from "markdown-it";
+import MarkdownIt, { type MarkdownIt as MarkdownItInstance, type Token } from "markdown-it";
 import attributes from "markdown-it-attrs";
 import footnotes from "markdown-it-footnote";
 
@@ -30,6 +30,21 @@ function prepare(source: string) {
     })
     .join("\n");
 }
+
+// Keep article titles as the only h1/h2 on a page: shift Markdown-authored
+// headings down two levels (# -> h3, ## -> h4, ...), capped at h6.
+const shiftHeading = (token: Token) => {
+  const level = Math.min(Number(token.tag[1]) + 2, 6);
+  token.tag = `h${level}`;
+};
+markdown.renderer.rules.heading_open = (tokens, index, options) => {
+  shiftHeading(tokens[index]);
+  return markdown.renderer.renderToken(tokens, index, options);
+};
+markdown.renderer.rules.heading_close = (tokens, index, options) => {
+  shiftHeading(tokens[index]);
+  return markdown.renderer.renderToken(tokens, index, options);
+};
 
 // Every image loads lazily and decodes off the main thread.
 const defaultImage = markdown.renderer.rules.image!;

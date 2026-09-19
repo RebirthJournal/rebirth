@@ -7,5 +7,5 @@ const { article, slug } = Astro.props;
 const issue = slug.includes('/') ? ` - ${slug.split('/')[0]}` : '';
 ---
 <Layout title={`《${article.title}》${article.author}${issue}`} author={article.author || undefined} description={description(article.body)}>
-  <main class="flex flex-col items-center"><Article article={article} slug={slug} /></main>
+  <main class="flex flex-col items-center"><Article article={article} slug={slug} headingLevel="h1" /></main>
 </Layout>

@@ -43,7 +43,7 @@ const links = issue.chapters.map(path => {
       </div>}
     </header>
     <Fragment set:html={renderMarkdown(chapter.body, `${name}-intro`)} />
-    {chapter.articles.map(path => <Article article={articleMap.get(path)!} slug={path} />)}
+    {chapter.articles.map(path => <Article article={articleMap.get(path)!} slug={path} headingLevel="h2" />)}
     <nav class="paginator flex" aria-label="章节翻页">
       {previous && <a href={journalUrl(previous)} class="mr-auto">&larr; {nameOf(previous)}</a>}
       {next && <a href={journalUrl(next)} class="ml-auto">{nameOf(next)} &rarr;</a>}
