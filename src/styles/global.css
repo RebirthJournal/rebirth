@@ -187,38 +187,6 @@
   border: 1px solid #f8f9fa;
 }
 
-/* Archived Markdown uses Bootstrap's spacing names; these values stay stable. */
-.text-left {
-  text-align: left !important;
-}
-.text-center {
-  text-align: center !important;
-}
-.text-right {
-  text-align: right !important;
-}
-.pt-5 {
-  padding-top: 3rem !important;
-}
-.pb-5 {
-  padding-bottom: 3rem !important;
-}
-.pb-1 {
-  padding-bottom: 0.25rem !important;
-}
-.pl-5 {
-  padding-left: 3rem !important;
-}
-.pl-0 {
-  padding-left: 0 !important;
-}
-.mb-5 {
-  margin-bottom: 3rem !important;
-}
-.mb-0 {
-  margin-bottom: 0 !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   #contents,
   #contents-toggle {
