@@ -1,13 +1,17 @@
 ---
+import IssuePage from '../../../components/IssuePage.astro';
 import ChapterPage from '../../../components/ChapterPage.astro';
 import { getJournal } from '../../../lib/content';
-interface Props { slug: string }
+interface Props { slug: string; isIssue: boolean }
 
 export async function getStaticPaths() {
   const journal = await getJournal();
-  return journal.chapters.map(({ slug }) => ({ params: { path: slug }, props: { slug } }));
+  return [
+    ...journal.settings.issues.map(slug => ({ params: { path: slug }, props: { slug, isIssue: true } })),
+    ...journal.chapters.map(({ slug }) => ({ params: { path: slug }, props: { slug, isIssue: false } })),
+  ];
 }
 
-const { slug } = Astro.props;
+const { slug, isIssue } = Astro.props;
 ---
-<ChapterPage slug={slug} />
+{isIssue ? <IssuePage slug={slug} /> : <ChapterPage slug={slug} />}

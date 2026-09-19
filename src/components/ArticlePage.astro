@@ -1,13 +1,22 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { ogImagePath } from '../lib/og/path';
+import ReaderLayout from '../layouts/ReaderLayout.astro';
+import ReadingPagination from './ReadingPagination';
 import Article from './Article.astro';
-import { description } from '../lib/content';
+import { description, getJournal, journalUrl } from '../lib/content';
 interface Props { slug: string; article: import('../lib/content').Article }
 const { article, slug } = Astro.props;
 const issue = slug.includes('/') ? ` - ${slug.split('/')[0]}` : '';
 const bodyText = await article.body();
+const { issueMap, chapterMap, articleMap } = await getJournal();
+const sequence = issueMap.get(slug.split('/')[0])!.chapters.flatMap(path => chapterMap.get(path)!.articles);
+const index = sequence.indexOf(slug);
+const previous = sequence[index - 1];
+const next = sequence[index + 1];
+const link = (path: string) => ({ name: articleMap.get(path)!.entry || articleMap.get(path)!.title, href: journalUrl(path) });
 ---
-<Layout image={ogImagePath(`journal/${slug}`)} type="article" title={`《${article.title}》${article.author}${issue}`} author={article.author || undefined} description={description(bodyText)}>
-  <main class="flex flex-col items-center"><Article article={article} slug={slug} headingLevel="h1" /></main>
-</Layout>
+<ReaderLayout slug={slug} title={`《${article.title}》${article.author}${issue}`} author={article.author || undefined} description={description(bodyText)}>
+  <main id="main-content" class="reader-main flex flex-col items-center">
+    <Article article={article} slug={slug} headingLevel="h1" />
+    <ReadingPagination label="文章翻页" previous={previous ? link(previous) : undefined} next={next ? link(next) : undefined} />
+  </main>
+</ReaderLayout>

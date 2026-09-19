@@ -2,11 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import { ogImagePath } from '../../lib/og/path';
 import { getJournal } from '../../lib/content';
+import IssueList from '../../components/IssueList';
 const { settings, issueUrl } = await getJournal();
 ---
 <Layout image={ogImagePath("journal")} title="期刊">
-  <main>
-    <h1>期刊目录</h1>
-    {settings.issues.map(issue => <><a href={issueUrl(issue)}>{issue}</a>{' '}</>)}
+  <main id="main-content" class="archive-page reader-main flex flex-col items-center">
+    <header class="w-full"><h1 class="font-mingti">期刊</h1></header>
+    <IssueList issues={settings.issues.map(issue => ({ name: issue, href: issueUrl(issue) }))} />
   </main>
 </Layout>
