@@ -1,11 +1,7 @@
 ---
 import type { Article } from '../lib/content';
 import { nameOf, getArticleComponent } from '../lib/content';
-import Figure from './Figure.astro';
-import NoIndent from './NoIndent.astro';
-import Right from './Right.astro';
-import Center from './Center.astro';
-import VerticalPoem from './VerticalPoem.astro';
+import { mdxComponents } from './mdx';
 interface Props { article: Article; slug: string; headingLevel?: 'h1' | 'h2' | 'h5' }
 const { article, slug, headingLevel = 'h2' } = Astro.props;
 const id = nameOf(slug);
@@ -17,6 +13,6 @@ const Content = loader ? (await loader()).default : null;
 <article id={id} class={article.poem ? 'poem' : 'article'}>
   {!article.hideHeading && <Heading class="title-line flex flex-wrap mt-4! mb-12!">{heading.map(text => <span>{text}</span>)}</Heading>}
   <div class="article-text">
-    {Content && <Content components={{ Figure, NoIndent, Right, Center, VerticalPoem }} />}
+    {Content && <Content components={mdxComponents} />}
   </div>
 </article>

@@ -3,11 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Article from './Article.astro';
 import Contents from './Contents';
 import { getJournal, journalUrl, nameOf, getChapterComponent, description } from '../lib/content';
-import Figure from './Figure.astro';
-import NoIndent from './NoIndent.astro';
-import Right from './Right.astro';
-import Center from './Center.astro';
-import VerticalPoem from './VerticalPoem.astro';
+import { mdxComponents } from './mdx';
 
 interface Props { slug: string }
 const { slug } = Astro.props;
@@ -49,7 +45,7 @@ const links = issue.chapters.map(path => {
         {chapter.subtitleCite && <p class="mb-0! self-end"><cite>——{chapter.subtitleCite}</cite></p>}
       </div>}
     </header>
-    {ChapterContent && <div class="chapter-intro w-full max-w-2xl flex flex-col items-center"><ChapterContent components={{ Figure, NoIndent, Right, Center, VerticalPoem }} /></div>}
+    {ChapterContent && <div class="chapter-intro w-full max-w-2xl flex flex-col items-center"><ChapterContent components={mdxComponents} /></div>}
     {chapter.articles.map(path => <Article article={articleMap.get(path)!} slug={path} headingLevel="h2" />)}
     <nav class="paginator flex" aria-label="章节翻页">
       {previous && <a href={journalUrl(previous)} class="mr-auto">&larr; {nameOf(previous)}</a>}
