@@ -51,7 +51,7 @@ main .title-line {
 }
 .font-mingti,
 .paginator,
-main .caption::after,
+main .caption figcaption,
 #contents > a {
   font-family: Mingti, "Songti Bold", "Songti SC", STSong, SimSun, serif;
   font-weight: 700;
@@ -74,7 +74,8 @@ main blockquote b {
 .font-smaller {
   font-size: smaller !important;
 }
-.no-indent {
+.no-indent,
+.no-indent p {
   text-indent: 0 !important;
 }
 .space {
@@ -253,6 +254,10 @@ main h5,
 main h6 {
   margin: 3em 0 2em;
 }
+main .article-text h3,
+main .article-text h4 {
+  text-align: center;
+}
 main h5 {
   font-size: 1.1em;
 }
@@ -294,8 +299,7 @@ main .caption img {
 main .caption:last-child {
   margin-top: 5em;
 }
-main .caption::after {
-  content: attr(caption);
+main .caption figcaption {
   position: absolute;
   inset: 0;
   margin: auto;
@@ -304,32 +308,32 @@ main .caption::after {
   text-align: center;
   pointer-events: none;
 }
-main .caption.left::after {
+main .caption.left figcaption {
   right: auto;
 }
-main .caption.right::after {
+main .caption.right figcaption {
   left: auto;
 }
-main .caption.inside::after {
+main .caption.inside figcaption {
   color: white;
 }
-main .caption.top.inside::after {
+main .caption.top.inside figcaption {
   bottom: auto;
 }
 main .caption.top.outside {
   margin-top: 3em;
 }
-main .caption.top.outside::after {
+main .caption.top.outside figcaption {
   top: auto;
   bottom: 100%;
 }
-main .caption.bottom.inside::after {
+main .caption.bottom.inside figcaption {
   top: auto;
 }
 main .caption.bottom.outside {
   margin-bottom: 2em;
 }
-main .caption.bottom.outside::after {
+main .caption.bottom.outside figcaption {
   top: 100%;
   bottom: auto;
 }

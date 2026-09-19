@@ -1,0 +1,13 @@
+---
+interface Props {
+  src: string;
+  alt?: string;
+  caption?: string;
+  position?: string;
+}
+const { src, alt = '', caption, position = 'bottom right outside' } = Astro.props;
+---
+<figure class={`caption ${position}`.trim()}>
+  <img src={src} alt={alt} loading="lazy" decoding="async" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
