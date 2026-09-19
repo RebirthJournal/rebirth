@@ -86,7 +86,7 @@ export default function Contents({
         id="contents-toggle"
         type="button"
         className={expanded ? "expanded" : ""}
-        aria-label="展开目录"
+        aria-label={expanded ? "收起目录" : "展开目录"}
         aria-controls="contents"
         aria-expanded={expanded}
         onClick={() => {

@@ -35,6 +35,7 @@ export default function Header({ issues }: { issues: { name: string; href: strin
         >
           <button
             ref={toggle}
+            type="button"
             className="dark-link nav-link issues-toggle"
             aria-expanded={open}
             aria-controls="issues-menu"
