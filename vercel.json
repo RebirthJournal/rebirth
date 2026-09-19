@@ -1,4 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "ignoreCommand": "case \"$VERCEL_GIT_COMMIT_MESSAGE\" in *\"[skip vercel]\"*|*\"[vercel skip]\"*|*\"[skip ci]\"*|*\"[ci skip]\"*) exit 0 ;; *) exit 1 ;; esac"
+  "ignoreCommand": "case \"$VERCEL_GIT_COMMIT_MESSAGE\" in *\"[skip vercel]\"*|*\"[vercel skip]\"*|*\"[skip ci]\"*|*\"[ci skip]\"*) exit 0 ;; *) exit 1 ;; esac",
+  "headers": [
+    {
+      "source": "/(fonts|img|_astro)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
