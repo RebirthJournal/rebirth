@@ -31,6 +31,14 @@ function prepare(source: string) {
     .join("\n");
 }
 
+// Every image loads lazily and decodes off the main thread.
+const defaultImage = markdown.renderer.rules.image!;
+markdown.renderer.rules.image = (tokens, index, options, env, self) => {
+  tokens[index].attrSet("loading", "lazy");
+  tokens[index].attrSet("decoding", "async");
+  return defaultImage(tokens, index, options, env, self);
+};
+
 markdown.renderer.rules.footnote_anchor_name = (tokens, index, _options, env) => {
   const meta = tokens[index].meta;
   const label = typeof meta?.label === "string" ? meta.label : undefined;
