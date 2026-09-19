@@ -14,8 +14,7 @@ const Heading = headingLevel;
 const loader = getArticleComponent(slug);
 const Content = loader ? (await loader()).default : null;
 ---
-<article class={article.poem ? 'poem' : 'article'}>
-  <div id={id}></div>
+<article id={id} class={article.poem ? 'poem' : 'article'}>
   {!article.hideHeading && <Heading class="title-line flex flex-wrap mt-4! mb-12!">{heading.map(text => <span>{text}</span>)}</Heading>}
   <div class="article-text">
     {Content && <Content components={{ Figure, NoIndent, Right, Center, VerticalPoem }} />}
