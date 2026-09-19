@@ -1,0 +1,31 @@
+---
+import ReaderLayout from '../layouts/ReaderLayout.astro';
+import ReadingPagination from './ReadingPagination';
+import IssueContents from './IssueContents';
+import { getJournal, journalUrl, nameOf } from '../lib/content';
+
+interface Props { slug: string }
+const { slug } = Astro.props;
+const { settings, issueMap, chapterMap, articleMap, issueUrl } = await getJournal();
+const issue = issueMap.get(slug)!;
+const index = settings.issues.indexOf(slug);
+const previous = settings.issues[index - 1];
+const next = settings.issues[index + 1];
+const chapters = issue.chapters.map(path => {
+  const chapter = chapterMap.get(path)!;
+  return {
+    name: chapter.entry || nameOf(path),
+    href: journalUrl(path),
+    articles: chapter.articles.filter(path => !articleMap.get(path)!.hideEntry).map(path => {
+      const article = articleMap.get(path)!;
+      return { name: article.entry || article.title, href: journalUrl(path), author: article.author };
+    }),
+  };
+});
+---
+<ReaderLayout slug={slug} title={slug} description={`${slug}目录：${issue.chapters.map(path => nameOf(path)).join('、')}`}>
+  <main id="main-content" class="reader-main issue-overview flex flex-col items-center">
+    <IssueContents name={slug} start={journalUrl(issue.chapters[0])} chapters={chapters} />
+    <ReadingPagination label="期刊翻页" previous={previous ? { name: previous, href: issueUrl(previous) } : undefined} next={next ? { name: next, href: issueUrl(next) } : undefined} />
+  </main>
+</ReaderLayout>
