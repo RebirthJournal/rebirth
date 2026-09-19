@@ -1,15 +1,23 @@
 ---
 import type { Article } from '../lib/content';
-import { nameOf } from '../lib/content';
-import { renderMarkdown } from '../lib/markdown';
+import { nameOf, getArticleComponent } from '../lib/content';
+import Figure from './Figure.astro';
+import NoIndent from './NoIndent.astro';
+import Right from './Right.astro';
+import Center from './Center.astro';
+import VerticalPoem from './VerticalPoem.astro';
 interface Props { article: Article; slug: string; headingLevel?: 'h1' | 'h2' | 'h5' }
 const { article, slug, headingLevel = 'h2' } = Astro.props;
 const id = nameOf(slug);
 const heading = article.heading.length ? article.heading : [article.title, article.author].filter(Boolean);
 const Heading = headingLevel;
+const loader = getArticleComponent(slug);
+const Content = loader ? (await loader()).default : null;
 ---
 <article class={article.poem ? 'poem' : 'article'}>
   <div id={id}></div>
   {!article.hideHeading && <Heading class="title-line flex flex-wrap mt-4! mb-12!">{heading.map(text => <span>{text}</span>)}</Heading>}
-  <div class="article-text" set:html={renderMarkdown(article.body, id)} />
+  <div class="article-text">
+    {Content && <Content components={{ Figure, NoIndent, Right, Center, VerticalPoem }} />}
+  </div>
 </article>

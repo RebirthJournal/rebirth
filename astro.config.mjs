@@ -4,6 +4,7 @@ import { defineConfig } from "astro/config";
 import yaml from "yaml";
 
 import react from "@astrojs/react";
+import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import vercel from "@astrojs/vercel";
 import keystatic from "@keystatic/astro";
@@ -22,10 +23,6 @@ if (fs.existsSync(issuesDir)) {
         const firstChapter = content.chapters[0];
         const destination = `/期刊/${firstChapter}/`;
         issueRedirects[`/期刊/${issueSlug}`] = {
-          status: 301,
-          destination,
-        };
-        issueRedirects[`/期刊/${issueSlug}/`] = {
           status: 301,
           destination,
         };
@@ -49,6 +46,7 @@ export default defineConfig({
   },
   // Local editing runs only in development. Deployed editing uses GitHub.
   integrations: [
+    mdx(),
     react(),
     ...(process.env.NODE_ENV !== "production" || repository ? [keystatic()] : []),
   ],

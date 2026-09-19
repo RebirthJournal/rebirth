@@ -12,6 +12,7 @@
     "prepare": "vp config"
   },
   "dependencies": {
+    "@astrojs/mdx": "^8.0.1",
     "@astrojs/react": "^6.0.5",
     "@astrojs/vercel": "^11.0.10",
     "@keystatic/astro": "^6.0.0",
@@ -22,9 +23,6 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "astro": "^7.3.2",
-    "markdown-it": "^15.0.2",
-    "markdown-it-attrs": "^5.0.1",
-    "markdown-it-footnote": "^4.0.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "tailwindcss": "^4.3.3",
@@ -32,7 +30,6 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@types/markdown-it-footnote": "^3.0.4",
     "@types/node": "^26.5.1",
     "typescript": "^7.0.2",
     "vite-plus": "0.3.2"

@@ -5,6 +5,32 @@ export const reader = createReader(process.cwd(), config);
 export type Article = Awaited<ReturnType<typeof reader.collections.articles.readOrThrow>>;
 export type Chapter = Awaited<ReturnType<typeof reader.collections.chapters.readOrThrow>>;
 
+type MdxModule = {
+  default: (_props: { components?: Record<string, unknown> }) => unknown;
+  frontmatter: Record<string, unknown>;
+};
+
+const articleModules = import.meta.glob<MdxModule>("/src/content/articles/**/*.mdx");
+const chapterModules = import.meta.glob<MdxModule>("/src/content/chapters/**/*.mdx");
+
+export function getArticleComponent(slug: string) {
+  return articleModules[`/src/content/articles/${slug}.mdx`];
+}
+
+export function getChapterComponent(slug: string) {
+  return chapterModules[`/src/content/chapters/${slug}.mdx`];
+}
+
+export function description(source: string) {
+  if (!source) return "";
+  return source
+    .replace(/<[^>]*>/g, "")
+    .replace(/^#+\s+/gm, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`~>]/g, "")
+    .replace(/\s+/g, "")
+    .slice(0, 80);
+}
 export const nameOf = (slug: string) => slug.split("/").at(-1)!;
 export const journalUrl = (slug = "") =>
   `/${encodeURIComponent("期刊")}/${slug ? slug.split("/").map(encodeURIComponent).join("/") + "/" : ""}`;
