@@ -1,0 +1,37 @@
+---
+import Layout from './Layout.astro';
+import { ogImagePath } from '../lib/og/path';
+import Reader from '../components/Reader';
+import { getJournal, journalUrl, nameOf } from '../lib/content';
+
+interface Props { slug: string; title: string; description?: string; author?: string }
+const { slug, ...meta } = Astro.props;
+const { settings, issueMap, chapterMap, articleMap, issueUrl } = await getJournal();
+const issueSlug = slug.split('/')[0];
+const issue = issueMap.get(issueSlug)!;
+const chapterSlug = slug.split('/').slice(0, 2).join('/');
+const article = articleMap.get(slug);
+const chapters = issue.chapters.map(path => {
+  const chapter = chapterMap.get(path)!;
+  return {
+    name: chapter.entry || nameOf(path),
+    href: journalUrl(path),
+    current: path === chapterSlug,
+    articles: chapter.articles.filter(path => !articleMap.get(path)!.hideEntry || path === slug).map(path => ({
+      name: articleMap.get(path)!.entry || articleMap.get(path)!.title,
+      href: journalUrl(path),
+      current: path === slug,
+    })),
+  };
+});
+const breadcrumbs = [
+  { name: issueSlug, href: issueUrl(issueSlug) },
+  ...(chapterMap.has(chapterSlug) ? [{ name: chapterMap.get(chapterSlug)!.entry || nameOf(chapterSlug), href: journalUrl(chapterSlug) }] : []),
+  ...(article ? [{ name: article.title, href: journalUrl(slug) }] : []),
+];
+---
+<Layout {...meta} image={ogImagePath(`journal/${slug}`)} type={article ? "article" : "website"}>
+  <Reader issue={{ name: issueSlug, href: issueUrl(issueSlug) }} issues={settings.issues.map(name => ({ name, href: issueUrl(name) }))} chapters={chapters} breadcrumbs={breadcrumbs} client:load>
+    <slot />
+  </Reader>
+</Layout>

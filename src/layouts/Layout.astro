@@ -13,7 +13,7 @@ interface Props {
   type?: "website" | "article";
   schema?: Record<string, any> | Array<Record<string, any>>;
 }
-const { settings, issueUrl } = await getJournal();
+const { settings } = await getJournal();
 const {
   title,
   description = settings.tagline,
@@ -81,7 +81,8 @@ const fullSchema = {
   <body>
     <Analytics/>
     <SpeedInsights/>
-    <Header issues={settings.issues.map(name => ({ name, href: issueUrl(name) }))} client:load />
+    <a class="skip-link" href="#main-content">跳至正文</a>
+    <Header pathname={decodeURIComponent(Astro.url.pathname)} client:load />
     <slot />
   </body>
 </html>

@@ -7,7 +7,7 @@ const [home, { issueUrl }] = await Promise.all([
 ]);
 ---
 <Layout description={home.quote.slice(0, 80)}>
-  <main class="flex flex-col items-center bg-[#333]">
+  <main id="main-content" class="flex flex-col items-center bg-[#333]">
     <h1 class="sr-only">《新生》文学期刊</h1>
     <img src="/img/logo-white-transparent-vertical.png" alt="Logo" class="h-[70vh] object-contain" />
     <blockquote class="home-quote relative pl-0">

@@ -74,7 +74,7 @@ async function loadJournal() {
     requireReferences(slug, entry.articles, articleMap, slug);
   }
 
-  const issueUrl = (slug: string) => journalUrl(issueMap.get(slug)?.chapters[0] ?? slug);
+  const issueUrl = (slug: string) => journalUrl(slug);
 
   return { settings, issues, chapters, articles, issueMap, chapterMap, articleMap, issueUrl };
 }
