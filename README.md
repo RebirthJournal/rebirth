@@ -8,18 +8,16 @@ The site is live at <https://www.rebirthjournal.net>.
 
 ## Editing
 
-Contents are under `src/content/**/*.yaml`. They can be edited via Keystatic at the [online editor](https://www.rebirthjournal.net/keystatic). Anyone who has write access to this repo will be able to edit the articles.
+Articles and chapters are stored as native MDX files (`src/content/articles/**/*.mdx`, `src/content/chapters/**/*.mdx`). They can be edited via Keystatic at the [online editor](https://www.rebirthjournal.net/keystatic). Anyone who has write access to this repo will be able to edit the articles.
 
 Link articles into a chapter's **文章顺序**, and chapters into an issue's **章节顺序** to set reading order.
 
-Articles are standard [Markdown](https://www.markdownguide.org/getting-started) files with the following extra syntax:
+Articles support standard Markdown and MDX components:
 
-```markdown
-![](/img/图片.jpg)
-{:.caption.bottom.right.outside caption="作者"}
+```mdx
+<Figure src="/img/图片.jpg" caption="作者" position="bottom right outside" />
 
-落款
-{:.text-right}
+<Right>落款</Right>
 ```
 
 ## Development
