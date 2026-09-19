@@ -19,7 +19,7 @@ const links = issue.chapters.map(path => {
   const entry = chapterMap.get(path)!;
   return {
     name: entry.entry || nameOf(path),
-    href: path === slug ? `#${encodeURIComponent(name)}` : journalUrl(path),
+    href: path === slug ? '#main-content' : journalUrl(path),
     current: path === slug,
     articles: entry.articles.filter(path => !articleMap.get(path)!.hideEntry).map(articlePath => ({
       name: articleMap.get(articlePath)!.entry || articleMap.get(articlePath)!.title,
@@ -30,7 +30,7 @@ const links = issue.chapters.map(path => {
 });
 ---
 <Layout title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(chapter.body)}>
-  <main id={name} class="flex flex-col items-center">
+  <main id="main-content" class="flex flex-col items-center">
     <header class="flex flex-col items-center">
       <h1 class="chapter-title font-mingti my-0!">{name}</h1>
       <div class="chapter-rule my-4"></div>
