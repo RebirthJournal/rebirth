@@ -1,4 +1,7 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
 interface Props {
   src: string;
   alt?: string;
@@ -6,8 +9,25 @@ interface Props {
   position?: string;
 }
 const { src, alt = '', caption, position = 'bottom right outside' } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/public/img/**/*.{jpeg,jpg,png,webp,JPEG,JPG,PNG,WEBP}');
+
+let imageMetadata: ImageMetadata | undefined;
+if (src.startsWith('/img/')) {
+  const decodedSrc = decodeURIComponent(src);
+  const key = `/public${decodedSrc}`;
+  const loader = images[key] ?? images[`/public${src}`];
+  if (loader) {
+    const mod = await loader();
+    imageMetadata = mod.default;
+  }
+}
 ---
 <figure class={`caption ${position}`.trim()}>
-  <img src={src} alt={alt} loading="lazy" decoding="async" />
+  {imageMetadata ? (
+    <Image src={imageMetadata} alt={alt} />
+  ) : (
+    <img src={src} alt={alt} loading="lazy" decoding="async" />
+  )}
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
