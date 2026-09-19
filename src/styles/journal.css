@@ -71,18 +71,9 @@ main blockquote b {
 .font-larger {
   font-size: larger !important;
 }
-.font-smaller {
-  font-size: smaller !important;
-}
 .no-indent,
 .no-indent p {
   text-indent: 0 !important;
-}
-.space {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  visibility: hidden;
 }
 cite {
   font-style: normal;
