@@ -29,7 +29,7 @@ const links = issue.chapters.map(path => {
   };
 });
 ---
-<Layout title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(chapter.body)}>
+<Layout title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(chapter.body) || `${issueName} · ${name} 收录作品选集`}>
   <main id="main-content" class="flex flex-col items-center">
     <header class="flex flex-col items-center">
       <h1 class="chapter-title font-mingti my-0!">{name}</h1>

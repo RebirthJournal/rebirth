@@ -56,6 +56,7 @@ export function renderMarkdown(source: string, id: string) {
 export function description(source: string) {
   return renderMarkdown(source, "description")
     .replace(/<[^>]*>/g, "")
+    .replace(/\{:[^}]+\}/g, "")
     .replace(/\s+/g, "")
     .slice(0, 80);
 }
