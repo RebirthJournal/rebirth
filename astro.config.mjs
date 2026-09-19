@@ -22,7 +22,11 @@ if (fs.existsSync(issuesDir)) {
         const firstChapter = content.chapters[0];
         const destination = `/期刊/${firstChapter}/`;
         issueRedirects[`/期刊/${issueSlug}`] = {
-          status: 308,
+          status: 301,
+          destination,
+        };
+        issueRedirects[`/期刊/${issueSlug}/`] = {
+          status: 301,
           destination,
         };
       }
