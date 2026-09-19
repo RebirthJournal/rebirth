@@ -1,10 +1,10 @@
 // @ts-check
 import fs from "node:fs";
 import { defineConfig } from "astro/config";
-import yaml from "yaml";
 
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import vercel from "@astrojs/vercel";
 import keystatic from "@keystatic/astro";
@@ -17,10 +17,10 @@ if (fs.existsSync(issuesDir)) {
   for (const file of fs.readdirSync(issuesDir)) {
     if (!file.endsWith(".yaml")) continue;
     try {
-      const content = yaml.parse(fs.readFileSync(`${issuesDir}/${file}`, "utf8"));
-      if (content?.path && content?.chapters?.[0]) {
-        const issueSlug = content.path;
-        const firstChapter = content.chapters[0];
+      const text = fs.readFileSync(`${issuesDir}/${file}`, "utf8");
+      const issueSlug = text.match(/^path:\s*(.+)$/m)?.[1]?.trim();
+      const firstChapter = text.match(/^\s*-\s*(.+)$/m)?.[1]?.trim();
+      if (issueSlug && firstChapter) {
         const destination = `/期刊/${firstChapter}/`;
         issueRedirects[`/期刊/${issueSlug}`] = {
           status: 301,
@@ -47,6 +47,7 @@ export default defineConfig({
   // Local editing runs only in development. Deployed editing uses GitHub.
   integrations: [
     mdx(),
+    sitemap(),
     react(),
     ...(process.env.NODE_ENV !== "production" || repository ? [keystatic()] : []),
   ],
