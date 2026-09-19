@@ -35,7 +35,9 @@ export const nameOf = (slug: string) => slug.split("/").at(-1)!;
 export const journalUrl = (slug = "") =>
   `/${encodeURIComponent("期刊")}/${slug ? slug.split("/").map(encodeURIComponent).join("/") + "/" : ""}`;
 
-export async function getJournal() {
+let journalCache: Promise<Awaited<ReturnType<typeof loadJournal>>> | null = null;
+
+async function loadJournal() {
   const [settings, issues, chapters, articles] = await Promise.all([
     reader.singletons.journal.readOrThrow(),
     reader.collections.issues.all(),
@@ -75,4 +77,9 @@ export async function getJournal() {
   const issueUrl = (slug: string) => journalUrl(issueMap.get(slug)?.chapters[0] ?? slug);
 
   return { settings, issues, chapters, articles, issueMap, chapterMap, articleMap, issueUrl };
+}
+
+export function getJournal() {
+  if (import.meta.env.DEV) return loadJournal();
+  return (journalCache ??= loadJournal());
 }
