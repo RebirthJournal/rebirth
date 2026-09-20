@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header';
 import { ogImagePath } from '../lib/og/path';
+import { ClientRouter, fade } from 'astro:transitions';
 import { getJournal } from '../lib/content';
 import '../styles/global.css';
 import '../styles/journal.css';
@@ -48,8 +49,9 @@ const fullSchema = {
 };
 ---
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" transition:name="root" transition:animate={fade({ duration: 'var(--page-fade-dur)' })}>
   <head>
+    <ClientRouter />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{ogTitle}</title>
@@ -84,5 +86,8 @@ const fullSchema = {
     <a class="skip-link" href="#main-content">跳至正文</a>
     <Header pathname={decodeURIComponent(Astro.url.pathname)} client:load />
     <slot />
+    <script>
+      import '../scripts/image-reveal';
+    </script>
   </body>
 </html>

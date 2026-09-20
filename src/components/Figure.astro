@@ -24,10 +24,15 @@ if (src.startsWith('/img/')) {
 }
 ---
 <figure class={`caption ${position}`.trim()}>
-  {imageMetadata ? (
-    <Image src={imageMetadata} alt={alt} class="w-full h-auto" />
-  ) : (
-    <img src={src} alt={alt} class="w-full h-auto" loading="lazy" decoding="async" />
-  )}
+  <div class="t-skel journal-image is-revealed" data-image-reveal>
+    <div class="t-skel-skeleton is-pulsing" aria-hidden="true"><span></span></div>
+    <div class="t-skel-content">
+      {imageMetadata ? (
+        <Image src={imageMetadata} alt={alt} class="w-full h-auto" />
+      ) : (
+        <img src={src} alt={alt} class="w-full h-auto" loading="lazy" decoding="async" />
+      )}
+    </div>
+  </div>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
