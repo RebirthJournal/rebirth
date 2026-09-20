@@ -1,4 +1,4 @@
-import { Fragment, type CSSProperties, type ReactNode } from "react";
+import { Fragment, useState, type CSSProperties, type ReactNode } from "react";
 import { Button } from "./ui/button";
 import {
   Breadcrumb,
@@ -33,7 +33,6 @@ import {
   useSidebar,
 } from "./ui/sidebar";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 
 type Link = { name: string; href: string };
@@ -94,10 +93,14 @@ function ReaderToolbar({ breadcrumbs }: Pick<Props, "breadcrumbs">) {
 
 function ReaderContents({ issue, issues, chapters }: Props) {
   const { setOpenMobile } = useSidebar();
+  const [issueMenuOpen, setIssueMenuOpen] = useState(false);
+  const [openChapters, setOpenChapters] = useState(() =>
+    chapters.filter((chapter) => chapter.current).map((chapter) => chapter.href),
+  );
   return (
     <Sidebar className="top-14 h-[calc(100svh-3.5rem)]" aria-label="本期目录">
       <SidebarHeader className="journal-ui flex-row items-center gap-1 border-b p-3">
-        <DropdownMenu>
+        <DropdownMenu open={issueMenuOpen} onOpenChange={setIssueMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -108,7 +111,10 @@ function ReaderContents({ issue, issues, chapters }: Props) {
               <CaretDownIcon weight="light" aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="journal-ui w-56">
+          <DropdownMenuContent
+            align="start"
+            className={`journal-ui t-dropdown w-56 ${issueMenuOpen ? "is-open" : "is-closing"}`}
+          >
             {issues.map((item) => (
               <DropdownMenuItem
                 key={item.href}
@@ -163,8 +169,16 @@ function ReaderContents({ issue, issues, chapters }: Props) {
               {chapters.map((chapter) => (
                 <Collapsible
                   key={chapter.href}
-                  defaultOpen={chapter.current}
-                  className="group/chapter"
+                  open={openChapters.includes(chapter.href)}
+                  onOpenChange={(open) =>
+                    setOpenChapters((current) =>
+                      open
+                        ? [...current, chapter.href]
+                        : current.filter((href) => href !== chapter.href),
+                    )
+                  }
+                  data-open={openChapters.includes(chapter.href)}
+                  className="t-acc"
                   asChild
                 >
                   <SidebarMenuItem>
@@ -189,35 +203,49 @@ function ReaderContents({ issue, issues, chapters }: Props) {
                       <>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuAction
-                            className="top-0 right-0 size-11"
+                            className="t-acc-head top-0 right-0 size-11"
                             aria-label={`${chapter.name}的文章`}
                           >
-                            <CaretRightIcon
-                              weight="light"
-                              className="transition-transform group-data-[state=open]/chapter:rotate-90 motion-reduce:transition-none"
-                            />
+                            <span className="t-acc-chevron size-3" aria-hidden="true">
+                              <svg
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1"
+                              >
+                                <path d="M4 6L8 10L12 6" />
+                              </svg>
+                            </span>
                           </SidebarMenuAction>
                         </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {chapter.articles.map((article) => (
-                              <SidebarMenuSubItem key={article.href}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  isActive={article.current}
-                                  className="h-auto min-h-11 py-2 leading-relaxed [&>span:last-child]:whitespace-normal"
-                                >
-                                  <a
-                                    href={article.href}
-                                    onClick={() => setOpenMobile(false)}
-                                    aria-current={article.current ? "page" : undefined}
-                                  >
-                                    <span>{article.name}</span>
-                                  </a>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
+                        <CollapsibleContent
+                          forceMount
+                          inert={!openChapters.includes(chapter.href)}
+                          aria-hidden={!openChapters.includes(chapter.href)}
+                        >
+                          <div className="t-acc-panel">
+                            <div className="t-acc-panel-inner">
+                              <SidebarMenuSub>
+                                {chapter.articles.map((article) => (
+                                  <SidebarMenuSubItem key={article.href}>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={article.current}
+                                      className="h-auto min-h-11 py-2 leading-relaxed [&>span:last-child]:whitespace-normal"
+                                    >
+                                      <a
+                                        href={article.href}
+                                        onClick={() => setOpenMobile(false)}
+                                        aria-current={article.current ? "page" : undefined}
+                                      >
+                                        <span>{article.name}</span>
+                                      </a>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                ))}
+                              </SidebarMenuSub>
+                            </div>
+                          </div>
                         </CollapsibleContent>
                       </>
                     )}
