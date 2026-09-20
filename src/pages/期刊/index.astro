@@ -4,10 +4,13 @@ import { ogImagePath } from '../../lib/og/path';
 import { getJournal } from '../../lib/content';
 import IssueList from '../../components/IssueList';
 const { settings, issueUrl } = await getJournal();
+const issues = settings.issues.map(name => ({ name, href: issueUrl(name) }));
 ---
 <Layout image={ogImagePath("journal")} title="期刊">
-  <main id="main-content" class="archive-page reader-main flex flex-col items-center">
-    <header class="w-full"><h1 class="font-mingti">期刊</h1></header>
-    <IssueList issues={settings.issues.map(issue => ({ name: issue, href: issueUrl(issue) }))} />
+  <main id="main-content" class="archive-page journal-ui">
+    <header class="archive-heading">
+      <h1 class="font-mingti">全部期刊</h1>
+    </header>
+    <IssueList issues={issues} />
   </main>
 </Layout>
