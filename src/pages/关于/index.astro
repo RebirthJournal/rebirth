@@ -1,12 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { ogImagePath } from '../../lib/og/path';
 import { reader, description } from '../../lib/content';
 import { mdxComponents } from '../../components/mdx';
 import AboutContent from '../../content/settings/about.mdx';
 const about = await reader.singletons.about.readOrThrow();
 const bodyText = await about.body();
 ---
-<Layout title="关于" description={description(bodyText)}>
+<Layout image={ogImagePath("about")} title="关于" description={description(bodyText)}>
   <main class="flex flex-col items-center">
     <h1 class="chapter-title font-mingti">{about.title}</h1>
     <div class="article-text">

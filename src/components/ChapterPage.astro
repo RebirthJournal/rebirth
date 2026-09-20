@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { ogImagePath } from '../lib/og/path';
 import Article from './Article.astro';
 import Contents from './Contents';
 import { getJournal, journalUrl, nameOf, getChapterComponent, description } from '../lib/content';
@@ -32,7 +33,7 @@ const links = issue.chapters.map(path => {
   };
 });
 ---
-<Layout title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(bodyText) || `${issueName} · ${name} 收录作品选集`}>
+<Layout image={ogImagePath(`journal/${slug}`)} title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(bodyText) || `${issueName} · ${name} 收录作品选集`}>
   <main id="main-content" class="flex flex-col items-center">
     <header class="flex flex-col items-center">
       <h1 class="chapter-title font-mingti my-0!">{name}</h1>

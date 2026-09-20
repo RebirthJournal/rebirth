@@ -1,9 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { ogImagePath } from '../../lib/og/path';
 import { getJournal } from '../../lib/content';
 const { settings, issueUrl } = await getJournal();
 ---
-<Layout title="期刊">
+<Layout image={ogImagePath("journal")} title="期刊">
   <main>
     <h1>期刊目录</h1>
     {settings.issues.map(issue => <><a href={issueUrl(issue)}>{issue}</a>{' '}</>)}

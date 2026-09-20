@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { ogImagePath } from '../lib/og/path';
 import Article from './Article.astro';
 import { description } from '../lib/content';
 interface Props { slug: string; article: import('../lib/content').Article }
@@ -7,6 +8,6 @@ const { article, slug } = Astro.props;
 const issue = slug.includes('/') ? ` - ${slug.split('/')[0]}` : '';
 const bodyText = await article.body();
 ---
-<Layout title={`《${article.title}》${article.author}${issue}`} author={article.author || undefined} description={description(bodyText)}>
+<Layout image={ogImagePath(`journal/${slug}`)} type="article" title={`《${article.title}》${article.author}${issue}`} author={article.author || undefined} description={description(bodyText)}>
   <main class="flex flex-col items-center"><Article article={article} slug={slug} headingLevel="h1" /></main>
 </Layout>
