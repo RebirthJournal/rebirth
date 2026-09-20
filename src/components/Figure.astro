@@ -25,9 +25,9 @@ if (src.startsWith('/img/')) {
 ---
 <figure class={`caption ${position}`.trim()}>
   {imageMetadata ? (
-    <Image src={imageMetadata} alt={alt} />
+    <Image src={imageMetadata} alt={alt} class="w-full h-auto" />
   ) : (
-    <img src={src} alt={alt} loading="lazy" decoding="async" />
+    <img src={src} alt={alt} class="w-full h-auto" loading="lazy" decoding="async" />
   )}
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

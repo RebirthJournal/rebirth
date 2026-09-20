@@ -283,9 +283,12 @@ main .footnotes ol {
 main .caption {
   position: relative;
   text-indent: 0;
+  width: 100%;
 }
 main .caption img {
   width: 100%;
+  height: auto;
+  display: block;
 }
 main .caption:last-child {
   margin-top: 5em;

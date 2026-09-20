@@ -19,7 +19,7 @@ export default function Header({ issues }: { issues: { name: string; href: strin
         <img
           src="/img/logo-white-black-horizontal.png"
           alt="《新生》首页"
-          style={{ width: "3em" }}
+          style={{ width: "3em", height: "auto" }}
         />
       </a>
       <ul className="ml-auto flex list-none m-0 p-0">
