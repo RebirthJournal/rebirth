@@ -184,6 +184,7 @@ main .footnotes ol {
 }
 main .caption {
   position: relative;
+  margin-inline: 0;
   text-indent: 0;
   width: 100%;
 }
