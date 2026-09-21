@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/optimize-images.ts && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
+    "optimize-images": "node scripts/optimize-images.ts",
     "prepare": "vp config"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/node": "^26.5.1",
+    "sharp": "0.35.4",
     "typescript": "^7.0.2",
     "vite-plus": "0.3.2"
   },
