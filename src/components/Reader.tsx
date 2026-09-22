@@ -52,7 +52,7 @@ export default function Reader(props: Props) {
       style={{ "--sidebar-width": "16rem" } as CSSProperties}
     >
       <ReaderContents {...props} />
-      <div className="min-w-0 flex-1">
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-clip">
         <ReaderToolbar breadcrumbs={props.breadcrumbs} />
         {props.children}
       </div>
@@ -71,7 +71,7 @@ function ReaderToolbar({ breadcrumbs }: Pick<Props, "breadcrumbs">) {
         aria-expanded={isMobile ? openMobile : open}
         aria-controls="issue-contents"
       />
-      <Breadcrumb aria-label="当前位置" className="min-w-0">
+      <Breadcrumb aria-label="当前位置" className="min-w-0 flex-1">
         <BreadcrumbList>
           {breadcrumbs.map((link, index) => (
             <Fragment key={link.href}>
@@ -147,7 +147,7 @@ function ReaderContents({ issue, issues, chapters }: Props) {
           <XIcon weight="light" />
         </Button>
       </SidebarHeader>
-      <SidebarContent className="journal-ui overscroll-contain">
+      <SidebarContent className="journal-ui overscroll-contain overflow-x-clip">
         <SidebarGroup>
           <nav id="issue-contents" aria-label={`${issue.name}目录`}>
             <SidebarMenu>
