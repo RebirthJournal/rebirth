@@ -13,10 +13,10 @@
     "prepare": "vp config"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.1",
-    "@astrojs/react": "^6.0.6",
+    "@astrojs/mdx": "^8.0.2",
+    "@astrojs/react": "^7.0.0",
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/vercel": "^11.0.10",
+    "@astrojs/vercel": "^11.0.11",
     "@keystatic/astro": "^6.0.0",
     "@keystatic/core": "^0.6.9",
     "@resvg/resvg-js": "^2.6.2",
@@ -25,18 +25,18 @@
     "@types/react-dom": "^19.3.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "astro": "^7.3.3",
+    "astro": "^7.3.5",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "satori": "^0.33.4",
+    "satori": "^0.33.5",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@types/node": "^26.6.2",
-    "sharp": "0.35.4",
+    "@types/node": "^26.6.3",
+    "sharp": "0.35.5",
     "typescript": "^7.0.2",
-    "vite-plus": "0.3.3"
+    "vite-plus": "1.0.0"
   },
   "packageManager": "pnpm@12.4.1",
   "allowScripts": {
