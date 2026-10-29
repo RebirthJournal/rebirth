@@ -54,6 +54,10 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // resvg loads a native .node addon at runtime; Rolldown's dependency
+    // optimizer cannot read it as a module, so keep it out of the bundle.
+    optimizeDeps: { exclude: ["@resvg/resvg-js"] },
+    ssr: { external: ["@resvg/resvg-js"] },
   },
 
   adapter: vercel({ imageService: true }),
