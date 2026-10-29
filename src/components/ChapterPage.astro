@@ -1,14 +1,13 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { ogImagePath } from '../lib/og/path';
+import ReaderLayout from '../layouts/ReaderLayout.astro';
+import ReadingPagination from './ReadingPagination';
 import Article from './Article.astro';
-import Contents from './Contents';
 import { getJournal, journalUrl, nameOf, getChapterComponent, description } from '../lib/content';
 import { mdxComponents } from './mdx';
 
 interface Props { slug: string }
 const { slug } = Astro.props;
-const { issueMap, chapterMap, articleMap, issueUrl } = await getJournal();
+const { issueMap, chapterMap, articleMap } = await getJournal();
 const chapter = chapterMap.get(slug)!;
 const chapterLoader = getChapterComponent(slug);
 const ChapterContent = chapterLoader ? (await chapterLoader()).default : null;
@@ -19,22 +18,9 @@ const name = nameOf(slug);
 const index = issue.chapters.indexOf(slug);
 const previous = issue.chapters[index - 1];
 const next = issue.chapters[index + 1];
-const links = issue.chapters.map(path => {
-  const entry = chapterMap.get(path)!;
-  return {
-    name: entry.entry || nameOf(path),
-    href: path === slug ? '#main-content' : journalUrl(path),
-    current: path === slug,
-    articles: entry.articles.filter(path => !articleMap.get(path)!.hideEntry).map(articlePath => ({
-      name: articleMap.get(articlePath)!.entry || articleMap.get(articlePath)!.title,
-      href: `${path === slug ? '' : journalUrl(path)}#${encodeURIComponent(nameOf(articlePath))}`,
-      id: nameOf(articlePath),
-    })),
-  };
-});
 ---
-<Layout image={ogImagePath(`journal/${slug}`)} title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(bodyText) || `${issueName} · ${name} 收录作品选集`}>
-  <main id="main-content" class="flex flex-col items-center">
+<ReaderLayout slug={slug} title={`${name} - ${issueName}`} description={chapter.subtitle.find(Boolean) || description(bodyText) || `${issueName} · ${name} 收录作品选集`}>
+  <main id="main-content" class="reader-main flex flex-col items-center">
     <header class="flex flex-col items-center">
       <h1 class="chapter-title font-mingti my-0!">{name}</h1>
       <div class="chapter-rule my-4"></div>
@@ -48,10 +34,6 @@ const links = issue.chapters.map(path => {
     </header>
     {ChapterContent && <div class="chapter-intro w-full max-w-2xl flex flex-col items-center"><ChapterContent components={mdxComponents} /></div>}
     {chapter.articles.map(path => <Article article={articleMap.get(path)!} slug={path} headingLevel="h2" />)}
-    <nav class="paginator flex" aria-label="章节翻页">
-      {previous && <a href={journalUrl(previous)} class="mr-auto">&larr; {nameOf(previous)}</a>}
-      {next && <a href={journalUrl(next)} class="ml-auto">{nameOf(next)} &rarr;</a>}
-    </nav>
+    <ReadingPagination label="章节翻页" previous={previous ? { name: nameOf(previous), href: journalUrl(previous) } : undefined} next={next ? { name: nameOf(next), href: journalUrl(next) } : undefined} />
   </main>
-  <Contents issue={{ name: issueName, href: issueUrl(issueName) }} chapters={links} client:load />
-</Layout>
+</ReaderLayout>
