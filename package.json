@@ -28,7 +28,7 @@
     "@vercel/speed-insights": "^2.0.0",
     "astro": "^7.4.2",
     "class-variance-authority": "^0.7.1",
-    "cn": "^0.3.0",
+    "cn": "^0.5.2",
     "radix-ui": "^1.6.7",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
