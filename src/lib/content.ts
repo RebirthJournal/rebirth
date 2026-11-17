@@ -48,30 +48,47 @@ async function loadJournal() {
   const chapterMap = new Map(chapters.map((item) => [item.slug, item.entry]));
   const articleMap = new Map(articles.map((item) => [item.slug, item.entry]));
 
+  const sourceOf = (owner: string) =>
+    owner === "journal"
+      ? "src/content/settings/journal.yaml"
+      : issueMap.has(owner)
+        ? `src/content/issues/${owner}.yaml`
+        : `src/content/chapters/${owner}.mdx`;
+  const problems: string[] = [];
+
   function requireReferences(
     owner: string,
     refs: readonly string[],
     entries: Map<string, unknown>,
     parent?: string,
   ) {
-    if (new Set(refs).size !== refs.length)
-      throw new Error(`${owner}: duplicate content reference`);
+    const source = sourceOf(owner);
+    if (new Set(refs).size !== refs.length) problems.push(`${source}: 引用列表中有重复条目`);
     for (const ref of refs) {
-      if (!entries.has(ref)) throw new Error(`${owner}: missing content ${ref}`);
+      if (!entries.has(ref))
+        problems.push(
+          `${source}: 引用了不存在的条目「${ref}」— 请先创建该条目，或从引用列表中移除`,
+        );
       if (parent && ref.slice(0, ref.lastIndexOf("/")) !== parent) {
-        throw new Error(`${owner}: ${ref} must belong to ${parent}`);
+        problems.push(`${source}: 「${ref}」不属于「${parent}」— 请检查条目路径或引用位置`);
       }
     }
   }
 
   requireReferences("journal", settings.issues, issueMap);
   for (const { slug, entry } of issues) {
-    if (!entry.chapters.length) throw new Error(`${slug}: at least one chapter is required`);
+    if (!entry.chapters.length) problems.push(`src/content/issues/${slug}.yaml: 至少需要一章`);
     requireReferences(slug, entry.chapters, chapterMap, slug);
   }
   for (const { slug, entry } of chapters) {
-    if (!issueMap.has(slug.split("/")[0])) throw new Error(`${slug}: missing parent issue`);
+    const issue = slug.split("/")[0];
+    if (!issueMap.has(issue))
+      problems.push(`src/content/chapters/${slug}.mdx: 找不到所属期号「${issue}」`);
     requireReferences(slug, entry.articles, articleMap, slug);
+  }
+
+  if (problems.length) {
+    throw new Error(`内容引用校验失败，共 ${problems.length} 处：\n- ${problems.join("\n- ")}`);
   }
 
   const issueUrl = (slug: string) => journalUrl(slug);

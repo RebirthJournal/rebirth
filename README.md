@@ -12,6 +12,8 @@ Articles and chapters are stored as native MDX files (`src/content/articles/**/*
 
 Link articles into a chapter's **文章顺序**, and chapters into an issue's **章节顺序** to set reading order.
 
+Keystatic checks path structure: issues are `第七期`, chapters are `第七期/序言`, articles are `第七期/序言/前言` (no `.mdx` suffix), and every issue needs at least one chapter. Create an entry before adding it to a reading order, and remove references before deleting an entry. The build rejects dangling references and reports all of them together with the source file and a fix hint.
+
 Articles support standard Markdown and MDX components:
 
 ```mdx

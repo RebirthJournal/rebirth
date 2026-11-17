@@ -4,18 +4,31 @@ import { block, wrapper } from "@keystatic/core/content-components";
 
 const repository = import.meta.env?.PUBLIC_KEYSTATIC_GITHUB_REPO;
 
-const pathField = (description: string) =>
+const pathPatterns = {
+  issue: {
+    regex: /^(?!.*(?:^|\/)\.{1,2}(?:\/|$))(?!.*\.mdx$)[^/?#\\]+$/,
+    message: "期号路径不带斜线或 .mdx 后缀，例如：第七期。",
+  },
+  chapter: {
+    regex: /^(?!.*(?:^|\/)\.{1,2}(?:\/|$))(?!.*\.mdx$)[^/?#\\]+\/[^/?#\\]+$/,
+    message: "章节路径格式为「期号/章节名」，例如：第七期/序言。",
+  },
+  article: {
+    regex: /^(?!.*(?:^|\/)\.{1,2}(?:\/|$))(?!.*\.mdx$)[^/?#\\]+\/[^/?#\\]+\/[^/?#\\]+$/,
+    message: "文章路径格式为「期号/章节名/文章名」，不要带 .mdx 后缀。",
+  },
+};
+
+const pathField = (
+  description: string,
+  pattern: (typeof pathPatterns)[keyof typeof pathPatterns],
+) =>
   fields.slug({
     name: { label: "文件路径", description, validation: { isRequired: true } },
     slug: {
       generate: (name) => name.trim(),
       description: "保留中文、空格和斜线。发布后修改路径会改变网址。",
-      validation: {
-        pattern: {
-          regex: /^(?!.*(?:^|\/)\.{1,2}(?:\/|$))[^?#\\]+$/,
-          message: "请使用相对路径，不含 ?、# 或反斜线。",
-        },
-      },
+      validation: { pattern },
     },
   });
 
@@ -25,10 +38,15 @@ const lines = (label: string) =>
     itemLabel: (props) => props.value,
   });
 
-const references = (label: string, target: string) =>
+const references = (label: string, target: string, minItems = 0) =>
   fields.array(
     fields.relationship({ label: "条目", collection: target, validation: { isRequired: true } }),
-    { label, itemLabel: (props) => props.value ?? "", description: "拖动条目调整阅读顺序。" },
+    {
+      label,
+      itemLabel: (props) => props.value ?? "",
+      description: "拖动条目调整阅读顺序。删除被引用条目前，请先从这里移除。",
+      validation: minItems ? { length: { min: minItems } } : undefined,
+    },
   );
 
 const body = () =>
@@ -197,8 +215,8 @@ export default config({
       slugField: "path",
       format: "yaml",
       schema: {
-        path: pathField("例如：第六期"),
-        chapters: references("章节顺序", "chapters"),
+        path: pathField("例如：第七期", pathPatterns.issue),
+        chapters: references("章节顺序", "chapters", 1),
       },
     }),
     chapters: collection({
@@ -207,7 +225,7 @@ export default config({
       slugField: "path",
       format: { contentField: "body" },
       schema: {
-        path: pathField("例如：第六期/序言"),
+        path: pathField("例如：第七期/序言", pathPatterns.chapter),
         entry: fields.text({ label: "目录名称", description: "留空时使用章节名。" }),
         subtitle: lines("题记"),
         subtitleCite: fields.text({ label: "题记出处" }),
@@ -222,7 +240,10 @@ export default config({
       format: { contentField: "body" },
       columns: ["title", "author"],
       schema: {
-        path: pathField("例如：第六期/序言/序言。路径最后一段也是章节内的文章锚点。"),
+        path: pathField(
+          "例如：第七期/序言/序言。路径最后一段也是章节内的文章锚点。",
+          pathPatterns.article,
+        ),
         title: fields.text({ label: "标题", validation: { isRequired: true } }),
         author: fields.text({ label: "作者" }),
         subtitle: fields.text({ label: "副标题（存档元数据）" }),
