@@ -88,12 +88,58 @@ async function loadJournal() {
   }
 
   if (problems.length) {
-    throw new Error(`内容引用校验失败，共 ${problems.length} 处：\n- ${problems.join("\n- ")}`);
+    const message = `内容引用校验失败，共 ${problems.length} 处：\n- ${problems.join("\n- ")}`;
+    if (!import.meta.env.DEV) throw new Error(message);
+    console.warn(`开发环境已跳过以下内容问题（生产构建仍会阻止部署）：\n${message}`);
   }
+
+  // In dev, hide unresolved references from pages instead of crashing on them.
+  const tolerant = import.meta.env.DEV && problems.length > 0;
+  const belongsTo = (ref: string, parent: string) => ref.slice(0, ref.lastIndexOf("/")) === parent;
+  const validRefs = (refs: readonly string[], parent: string, entries: Map<string, unknown>) =>
+    [...new Set(refs)].filter((ref) => entries.has(ref) && belongsTo(ref, parent));
+
+  const visibleIssues = tolerant
+    ? issues
+        .map(({ slug, entry }) => ({
+          slug,
+          entry: { ...entry, chapters: validRefs(entry.chapters, slug, chapterMap) },
+        }))
+        .filter(({ entry }) => entry.chapters.length > 0)
+    : issues;
+  const issueSlugs = new Set(visibleIssues.map(({ slug }) => slug));
+  const visibleChapters = tolerant
+    ? chapters
+        .filter(({ slug }) => issueSlugs.has(slug.split("/")[0]))
+        .map(({ slug, entry }) => ({
+          slug,
+          entry: { ...entry, articles: validRefs(entry.articles, slug, articleMap) },
+        }))
+    : chapters;
+  const chapterSlugs = new Set(visibleChapters.map(({ slug }) => slug));
+  const visibleArticles = tolerant
+    ? articles.filter(({ slug }) => chapterSlugs.has(slug.split("/").slice(0, 2).join("/")))
+    : articles;
+  const visibleSettings = tolerant
+    ? { ...settings, issues: [...new Set(settings.issues)].filter((ref) => issueSlugs.has(ref)) }
+    : settings;
+
+  const visibleIssueMap = new Map(visibleIssues.map((item) => [item.slug, item.entry]));
+  const visibleChapterMap = new Map(visibleChapters.map((item) => [item.slug, item.entry]));
+  const visibleArticleMap = new Map(visibleArticles.map((item) => [item.slug, item.entry]));
 
   const issueUrl = (slug: string) => journalUrl(slug);
 
-  return { settings, issues, chapters, articles, issueMap, chapterMap, articleMap, issueUrl };
+  return {
+    settings: visibleSettings,
+    issues: visibleIssues,
+    chapters: visibleChapters,
+    articles: visibleArticles,
+    issueMap: visibleIssueMap,
+    chapterMap: visibleChapterMap,
+    articleMap: visibleArticleMap,
+    issueUrl,
+  };
 }
 
 export function getJournal() {
