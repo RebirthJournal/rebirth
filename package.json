@@ -15,7 +15,7 @@
   "dependencies": {
     "@astrojs/mdx": "^8.1.6",
     "@astrojs/react": "^7.1.9",
-    "@astrojs/sitemap": "^3.7.5",
+    "@astrojs/sitemap": "^3.7.6",
     "@astrojs/vercel": "^11.0.22",
     "@keystatic/astro": "^6.0.0",
     "@keystatic/core": "^0.6.10",
@@ -26,7 +26,7 @@
     "@types/react-dom": "^19.3.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.1.0",
-    "astro": "^7.4.12",
+    "astro": "^7.4.13",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "radix-ui": "^1.6.7",
